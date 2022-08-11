@@ -2,9 +2,12 @@ const request = require('request');
 const fs = require('fs');
 const [url, path] = process.argv.slice(2);
 
-request(url, (error, response, body) => {
+request(url, (err, response, body) => {
   fs.writeFile(path, body, (err) => {
     if (err) throw err;
-    console.log(`Downloaded and saved 1235 bytes to ${path}`);
-  })
+    fs.stat(path, (err, stats) => {
+      if (err) throw err;
+      console.log(`Downloaded and saved ${stats.size} bytes to ${path}`);
+    });
+  });
 });
